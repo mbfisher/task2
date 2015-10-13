@@ -25,21 +25,24 @@ class Project implements ProjectInterface
             return $this;
         }
 
-        $builder = new TaskBuilder();
-
         # Work is the last arg
-        $builder->setWork(array_pop($args));
+        $work = array_pop($args);
+
+        if (!is_callable($work)) {
+            throw new \InvalidArgumentException('Work must be callable');
+        }
+
         # Name is the first arg
-        $builder->setName(array_shift($args));
+        $name = array_shift($args);
+        $description = null;
 
         $dependencies = [];
-
         if (!empty($args)) {
             if (count($args) === 2) {
-                $builder->setDescription($args[0]);
+                $description = $args[0];
                 $dependencies = $args[1];
             } elseif (is_string($args[0])) {
-                $builder->setDescription(array_shift($args));
+                $description = array_shift($args);
             } else {
                 $dependencies = array_shift($args);
             }
@@ -49,7 +52,7 @@ class Project implements ProjectInterface
             throw new \InvalidArgumentException('Dependencies must be an array');
         }
 
-        $task = $builder->getResult();
+        $task = new ClosureTask($name, $description, $work);
         $this->doAddTask($task, $dependencies);
 
         return $this;
@@ -77,9 +80,13 @@ class Project implements ProjectInterface
         return $this->dependencies;
     }
 
+    /**
+     * @param $name
+     * @return array
+     */
     public function getTaskDependencies($name)
     {
-        return $this->dependencies[$name];
+        return $this->dependencies[$name] ?: [];
     }
 
     public function getTask($name)
@@ -87,8 +94,12 @@ class Project implements ProjectInterface
         return $this->tasks[$name];
     }
 
+    /**
+     * @param $name
+     * @return TaskInterface[]
+     */
     public function resolveDependencies($name)
     {
-        return array_map($this->getTaskDependencies($name), [$this, 'getTask']);
+        return array_map([$this, 'getTask'], $this->getTaskDependencies($name));
     }
 }

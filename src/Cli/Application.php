@@ -6,6 +6,7 @@ use Symfony\Component\Console\Application as ConsoleApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Task\Cli\Command\RunCommand;
 use Task\ProjectInterface;
+use Task\TaskInterface;
 
 class Application extends ConsoleApplication
 {
@@ -84,6 +85,4 @@ class Application extends ConsoleApplication
     {
         return $this->project;
     }
-
-
 }
