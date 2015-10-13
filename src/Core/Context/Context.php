@@ -37,6 +37,10 @@ class Context implements ContextInterface
         $this->output = $builder->getOutput();
         $this->parameters = $builder->getParameters() ?: new ArrayCollection();
         $this->plugins = $builder->getPlugins() ?: new ArrayCollection();
+
+        foreach ($this->plugins as $plugin) {
+            $plugin->setContext($this);
+        }
     }
 
     public function run($name)

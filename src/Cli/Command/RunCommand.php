@@ -58,8 +58,11 @@ class RunCommand extends Command
 
     protected function findTaskfile(InputInterface $input)
     {
-        $search = $input->getOption('taskfile') ?: ['./Taskfile', './Taskfile.php', './taskfile.php'];
-        $search = (array) $search;
+        $search = ['./Taskfile', './Taskfile.php', './taskfile.php'];
+
+        if ($path = $input->getOption('taskfile')) {
+            $search = [ltrim($path, '=')];
+        }
 
         $taskfile = array_reduce($search, function ($carry, $path) {
             return $carry ?: realpath($path);
