@@ -17,6 +17,12 @@ interface ProjectInterface
 
     /**
      * @param $name
+     * @return bool
+     */
+    public function hasTask($name);
+
+    /**
+     * @param $name
      * @return TaskInterface[]
      */
     public function getTaskDependencies($name);

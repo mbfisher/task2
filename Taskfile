@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-$project = new Task\Project();
+$project = new Task\Project('test');
 
 $project->addTask('hello', function () {
     $this->getOutput()->write('hello!');

@@ -148,6 +148,11 @@ class Project implements ProjectInterface
         return $this->tasks->get($name);
     }
 
+    public function hasTask($name)
+    {
+        return $this->tasks->containsKey($name);
+    }
+
     /**
      * @return mixed
      */

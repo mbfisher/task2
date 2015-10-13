@@ -18,18 +18,25 @@ class RunCommand extends Command
     {
         $this
             ->setName('run')
+            ->setDescription('Run a task')
             ->addArgument('name', InputArgument::REQUIRED)
             ->addOption('parameter', 'p', InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $project = $this->findProject();
+        $project = $this->findProject($input);
 
         $name = $input->getArgument('name');
+
+        if (!$project->hasTask($name)) {
+            throw new \InvalidArgumentException('Task not found');
+        }
+
+        $output = new ConsoleOutput($output);
         $parameters = $this->parseParameters($input);
 
-        $context = $project->createContext(new ConsoleOutput($output), $parameters);
+        $context = $project->createContext($output, $parameters);
 
         $context->run($name);
     }
@@ -38,13 +45,9 @@ class RunCommand extends Command
      * @return ProjectInterface
      * @throws \RuntimeException
      */
-    protected function findProject()
+    protected function findProject(InputInterface $input)
     {
-        if (!$taskfile = $this->findTaskfile()) {
-            throw new \RuntimeException("No Taskfile found");
-        }
-
-        $project = require $taskfile;
+        $project = require $this->findTaskfile($input);
 
         if (!($project instanceof ProjectInterface)) {
             throw new \UnexpectedValueException("Taskfile must return an instance of Task\\ProjectInterface");
@@ -53,19 +56,20 @@ class RunCommand extends Command
         return $project;
     }
 
-    protected function findTaskfile()
+    protected function findTaskfile(InputInterface $input)
     {
-        $cwd = getcwd();
+        $search = $input->getOption('taskfile') ?: ['./Taskfile', './Taskfile.php', './taskfile.php'];
+        $search = (array) $search;
 
-        foreach (['Taskfile', 'taskfile', 'taskfile.php'] as $variant) {
-            $file = $cwd . DIRECTORY_SEPARATOR . $variant;
+        $taskfile = array_reduce($search, function ($carry, $path) {
+            return $carry ?: realpath($path);
+        });
 
-            if (is_file($file)) {
-                return $file;
-            }
+        if (!$taskfile) {
+            throw new \RuntimeException('No Taskfile found at ' . implode(',', $search));
         }
 
-        return false;
+        return $taskfile;
     }
 
     protected function parseParameters(InputInterface $input)
