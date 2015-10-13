@@ -2,15 +2,49 @@
 
 namespace Task;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Task\Context\Context;
+use Task\Context\ContextBuilder;
+use Task\Output\OutputInterface;
+use Task\Plugin\PluginInterface;
+
 class Project implements ProjectInterface
 {
+    private $name;
+
+    /**
+     * @var Collection
+     */
     private $tasks;
+
+    /**
+     * @var Collection
+     */
     private $dependencies;
 
     /**
-     * addTask($name, $work);
-     * addTask($name, $description, $work);
-     * addTask($name, $description, array $dependencies, $work);
+     * @var Collection
+     */
+    private $contextPlugins;
+
+    /**
+     * @param $name
+     */
+    public function __construct($name)
+    {
+        $this->name = $name;
+
+        $this->tasks = new ArrayCollection();
+        $this->dependencies = new ArrayCollection();
+        $this->contextPlugins = new ArrayCollection();
+    }
+
+    /**
+     * addTask(TaskInterface $task);
+     * addTask($name, Closure $work);
+     * addTask($name, $description, Closure $work);
+     * addTask($name, $description, array $dependencies, Closure $work);
      */
     public function addTask()
     {
@@ -28,7 +62,7 @@ class Project implements ProjectInterface
         # Work is the last arg
         $work = array_pop($args);
 
-        if (!is_callable($work)) {
+        if (!($work instanceof \Closure)) {
             throw new \InvalidArgumentException('Work must be callable');
         }
 
@@ -60,16 +94,58 @@ class Project implements ProjectInterface
 
     private function doAddTask(TaskInterface $task, $dependencies = [])
     {
-        $this->tasks[$task->getName()] = $task;
+        $this->tasks->set($task->getName(), $task);
 
         if ($dependencies) {
-            $this->dependencies[$task->getName()] = $dependencies;
+            $this->dependencies->set($task->getName(), $dependencies);
         }
     }
 
+    /**
+     * @param OutputInterface $output
+     * @param Collection|null $parameters
+     * @return Context
+     */
+    public function createContext(OutputInterface $output, Collection $parameters = null)
+    {
+        $builder = new ContextBuilder();
+
+        $builder->setProject($this);
+        $builder->setOutput($output);
+        $builder->setParameters($parameters ?: new ArrayCollection());
+        $builder->setPlugins($this->getContextPlugins());
+
+        return $builder->getResult();
+    }
+
+    public function plugContext(PluginInterface $plugin, $name = null)
+    {
+        $this->contextPlugins->set($name ?: $plugin->getName(), $plugin);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Collection
+     */
     public function getTasks()
     {
         return $this->tasks;
+    }
+
+    /**
+     * @param $name
+     * @return TaskInterface|null
+     */
+    public function getTask($name)
+    {
+        return $this->tasks->get($name);
     }
 
     /**
@@ -86,20 +162,14 @@ class Project implements ProjectInterface
      */
     public function getTaskDependencies($name)
     {
-        return $this->dependencies[$name] ?: [];
-    }
-
-    public function getTask($name)
-    {
-        return $this->tasks[$name];
+        return $this->dependencies->get($name) ?: [];
     }
 
     /**
-     * @param $name
-     * @return TaskInterface[]
+     * @return Collection
      */
-    public function resolveDependencies($name)
+    public function getContextPlugins()
     {
-        return array_map([$this, 'getTask'], $this->getTaskDependencies($name));
+        return $this->contextPlugins;
     }
 }

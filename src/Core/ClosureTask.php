@@ -2,6 +2,8 @@
 
 namespace Task;
 
+use Task\Context\ContextInterface;
+
 class ClosureTask implements TaskInterface
 {
     private $name;

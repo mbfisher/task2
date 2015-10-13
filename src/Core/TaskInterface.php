@@ -2,6 +2,8 @@
 
 namespace Task;
 
+use Task\Context\ContextInterface;
+
 interface TaskInterface
 {
     public function getName();

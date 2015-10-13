@@ -4,13 +4,16 @@ namespace Task;
 
 class ProjectTest extends \PHPUnit_Framework_TestCase
 {
+    protected function getSubject()
+    {
+        return new Project('test');
+    }
     /**
      * @expectedException \InvalidArgumentException
      */
     public function testAddTaskWithoutArguments()
     {
-        $project = new Project();
-        $project->addTask();
+        $this->getSubject()->addTask();
     }
 
     public function testAddTaskInterface()
@@ -18,7 +21,7 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
         $task = $this->prophesize('Task\TaskInterface');
         $task->getName()->willReturn('foo');
 
-        $project = new Project();
+        $project = $this->getSubject();
         $project->addTask($task->reveal());
 
         $this->assertSame($task->reveal(), $project->getTasks()['foo']);
@@ -26,11 +29,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
 
     public function testAddNameWork()
     {
-        $project = new Project();
+        $project = $this->getSubject();
         $project->addTask('foo', $work = function () {});
 
         $task = $project->getTasks()['foo'];
-        $this->assertInstanceOf('Task\Task', $task);
+        $this->assertInstanceOf('Task\ClosureTask', $task);
         $this->assertEquals('foo', $task->getName());
         $this->assertEquals($work, $task->getWork());
         $this->assertEmpty($task->getDescription());
@@ -39,11 +42,11 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
 
     public function testAddNameDescriptionWork()
     {
-        $project = new Project();
+        $project = $this->getSubject();
         $project->addTask('foo', 'test', $work = function () {});
 
         $task = $project->getTasks()['foo'];
-        $this->assertInstanceOf('Task\Task', $task);
+        $this->assertInstanceOf('Task\ClosureTask', $task);
         $this->assertEquals('foo', $task->getName());
         $this->assertEquals($work, $task->getWork());
         $this->assertEquals('test', $task->getDescription());
@@ -52,14 +55,14 @@ class ProjectTest extends \PHPUnit_Framework_TestCase
 
     public function testAddNameDescriptionDependenciesWork()
     {
-        $project = new Project();
+        $project = $this->getSubject();
         $project->addTask('foo', 'test', ['bar'], $work = function () {});
 
         $task = $project->getTasks()['foo'];
-        $this->assertInstanceOf('Task\Task', $task);
+        $this->assertInstanceOf('Task\ClosureTask', $task);
         $this->assertEquals('foo', $task->getName());
         $this->assertEquals($work, $task->getWork());
         $this->assertEquals('test', $task->getDescription());
-        $this->assertEquals(['foo' => ['bar']], $project->getDependencies());
+        $this->assertEquals(['foo' => ['bar']], $project->getDependencies()->toArray());
     }
 }

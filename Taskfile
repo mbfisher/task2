@@ -4,8 +4,12 @@ require 'vendor/autoload.php';
 
 $project = new Task\Project();
 
-$project->addTask('test', function () {
+$project->addTask('hello', function () {
     $this->getOutput()->write('hello!');
+});
+
+$project->addTask('test', function () {
+    $this->run('hello');
 });
 
 return $project;

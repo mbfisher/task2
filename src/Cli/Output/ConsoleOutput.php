@@ -37,7 +37,7 @@ class ConsoleOutput extends EventEmitter implements OutputInterface
 
     public function write($data)
     {
-        $this->getOutput()->write($data);
+        $this->getOutput()->write($data, true);
     }
 
     public function end($data = null)

@@ -1,6 +1,6 @@
 <?php
 
-namespace Task;
+namespace Task\Context;
 
 use Task\Output\OutputInterface;
 

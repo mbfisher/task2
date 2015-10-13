@@ -1,11 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "576925ce3c7bd4d973ddf440e0f5c7b3",
-    "content-hash": "af6c2145b31f0e0dcc4ee524c65fd2c6",
+    "hash": "4b756f29ee86927e4c550929bdd294c6",
     "packages": [
         {
             "name": "doctrine/collections",
@@ -118,6 +117,91 @@
                 "event-emitter"
             ],
             "time": "2012-11-02 14:49:47"
+        },
+        {
+            "name": "illuminate/container",
+            "version": "v5.1.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/container.git",
+                "reference": "66621248395705cc64bc1ce9262b99b4bfa606f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/66621248395705cc64bc1ce9262b99b4bfa606f2",
+                "reference": "66621248395705cc64bc1ce9262b99b4bfa606f2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.1.*",
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Container\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Container package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-08-26 23:00:38"
+        },
+        {
+            "name": "illuminate/contracts",
+            "version": "v5.1.16",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/contracts.git",
+                "reference": "610aea16e3d91dfd85db4cf43703403a83b7cba2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/610aea16e3d91dfd85db4cf43703403a83b7cba2",
+                "reference": "610aea16e3d91dfd85db4cf43703403a83b7cba2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Contracts\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "The Illuminate Contracts package.",
+            "homepage": "http://laravel.com",
+            "time": "2015-08-31 12:59:22"
         },
         {
             "name": "react/stream",
@@ -236,7 +320,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/26404e0c90565b614ee76b988b9bc8790d77f590",
+                "url": "http://packagist.skybet.net/archive/doctrine-instantiator-26404e0c90565b614ee76b988b9bc8790d77f590-zip-249d6b.tar",
                 "reference": "26404e0c90565b614ee76b988b9bc8790d77f590",
                 "shasum": "76d9147914c4bac3ad5c4fb04964969caaf236e1"
             },
@@ -300,7 +384,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/d8093b631a31628342d0703764935f8bac2c56b1",
+                "url": "http://packagist.skybet.net/archive/myclabs-deep-copy-d8093b631a31628342d0703764935f8bac2c56b1-zip-69884e.tar",
                 "reference": "d8093b631a31628342d0703764935f8bac2c56b1",
                 "shasum": "c921d1e4ea97b4f503041a30ffd0509eddbdc66a"
             },
@@ -350,7 +434,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/d68dbdc53dc358a816f00b300704702b2eaff7b8",
+                "url": "http://packagist.skybet.net/archive/phpdocumentor-reflection-docblock-d68dbdc53dc358a816f00b300704702b2eaff7b8-zip-b8dbaa.tar",
                 "reference": "d68dbdc53dc358a816f00b300704702b2eaff7b8",
                 "shasum": "17c52a4ca703f80ed7bb35ffd78727c7b43694e8"
             },
@@ -402,7 +486,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/4745ded9307786b730d7a60df5cb5a6c43cf95f7",
+                "url": "http://packagist.skybet.net/archive/phpspec-prophecy-4745ded9307786b730d7a60df5cb5a6c43cf95f7-zip-682471.tar",
                 "reference": "4745ded9307786b730d7a60df5cb5a6c43cf95f7",
                 "shasum": "773e6346d4d6e456a090b82d1214c3ae968d0bbc"
             },
@@ -527,7 +611,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-file-iterator/zipball/6150bf2c35d3fc379e50c7602b75caceaa39dbf0",
+                "url": "http://packagist.skybet.net/archive/phpunit-php-file-iterator-6150bf2c35d3fc379e50c7602b75caceaa39dbf0-zip-a7b18d.tar",
                 "reference": "6150bf2c35d3fc379e50c7602b75caceaa39dbf0",
                 "shasum": "b17e83d648b4c3a51519eddd1d56a07a92daa355"
             },
@@ -578,7 +662,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
+                "url": "http://packagist.skybet.net/archive/phpunit-php-text-template-206dfefc0ffe9cebf65c413e3d0e809c82fbf00a-zip-dce9d3.tar",
                 "reference": "206dfefc0ffe9cebf65c413e3d0e809c82fbf00a",
                 "shasum": "08f5f9a0532052e10d1ee2263e537e8a6885c0da"
             },
@@ -626,7 +710,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-timer/zipball/3e82f4e9fc92665fafd9157568e4dcb01d014e5b",
+                "url": "http://packagist.skybet.net/archive/phpunit-php-timer-3e82f4e9fc92665fafd9157568e4dcb01d014e5b-zip-267b07.tar",
                 "reference": "3e82f4e9fc92665fafd9157568e4dcb01d014e5b",
                 "shasum": "0b933a1f3f9aa3e5de8b25e7734fb47c9f8ab333"
             },
@@ -850,7 +934,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/937efb279bd37a375bcadf584dec0726f84dbf22",
+                "url": "http://packagist.skybet.net/archive/sebastian-comparator-937efb279bd37a375bcadf584dec0726f84dbf22-zip-275d2d.tar",
                 "reference": "937efb279bd37a375bcadf584dec0726f84dbf22",
                 "shasum": "4b61a825080a4ea7fb5aa2bfdd4774a38ee14cc0"
             },
@@ -917,7 +1001,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/863df9687835c62aa423a22412d26fa2ebde3fd3",
+                "url": "http://packagist.skybet.net/archive/sebastian-diff-863df9687835c62aa423a22412d26fa2ebde3fd3-zip-c4cc0d.tar",
                 "reference": "863df9687835c62aa423a22412d26fa2ebde3fd3",
                 "shasum": "b3b66de2c55518e8b2412cbc30d66004ea01b114"
             },
@@ -972,7 +1056,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/6324c907ce7a52478eeeaede764f48733ef5ae44",
+                "url": "http://packagist.skybet.net/archive/sebastian-environment-6324c907ce7a52478eeeaede764f48733ef5ae44-zip-16c89f.tar",
                 "reference": "6324c907ce7a52478eeeaede764f48733ef5ae44",
                 "shasum": "e6649786548d114573443d6c5b223833ea804df8"
             },
@@ -1025,7 +1109,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/exporter/zipball/7ae5513327cb536431847bcc0c10edba2701064e",
+                "url": "http://packagist.skybet.net/archive/sebastian-exporter-7ae5513327cb536431847bcc0c10edba2701064e-zip-5e64a9.tar",
                 "reference": "7ae5513327cb536431847bcc0c10edba2701064e",
                 "shasum": "de2a59eb103acad907b924ffd9514c452c40792d"
             },
@@ -1094,7 +1178,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4",
+                "url": "http://packagist.skybet.net/archive/sebastian-global-state-bc37d50fea7d017d3d340f230811c9f1d7280af4-zip-c4abec.tar",
                 "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4",
                 "shasum": "a70f23c1bae66338f8561694c3ab7e658a974020"
             },
@@ -1153,7 +1237,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/recursion-context/zipball/994d4a811bafe801fb06dccbee797863ba2792ba",
+                "url": "http://packagist.skybet.net/archive/sebastian-recursion-context-994d4a811bafe801fb06dccbee797863ba2792ba-zip-721157.tar",
                 "reference": "994d4a811bafe801fb06dccbee797863ba2792ba",
                 "shasum": "a578076eac59cbdf8a9e89f42787388e1db14a93"
             },
@@ -1209,7 +1293,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
+                "url": "http://packagist.skybet.net/archive/sebastian-resource-operations-ce990bb21759f94aeafd30209e8cfcdfa8bc3f52-zip-4a3a08.tar",
                 "reference": "ce990bb21759f94aeafd30209e8cfcdfa8bc3f52",
                 "shasum": "32aea34d8a36462fa2b7744b85a9971adb95dadf"
             },
@@ -1254,7 +1338,7 @@
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/sebastianbergmann/version/zipball/58b3a85e7999757d6ad81c787a1fbf5ff6c628c6",
+                "url": "http://packagist.skybet.net/archive/sebastian-version-58b3a85e7999757d6ad81c787a1fbf5ff6c628c6-zip-8093ed.tar",
                 "reference": "58b3a85e7999757d6ad81c787a1fbf5ff6c628c6",
                 "shasum": "5fc172527d0ffe215d1cc5e0e4e1669991b1de9d"
             },
@@ -1288,12 +1372,12 @@
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Yaml.git",
+                "url": "https://github.com/symfony/yaml.git",
                 "reference": "174f009ed36379a801109955fc5a71a49fe62dd4"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/174f009ed36379a801109955fc5a71a49fe62dd4",
+                "url": "http://packagist.skybet.net/archive/symfony-yaml-174f009ed36379a801109955fc5a71a49fe62dd4-zip-1072f8.tar",
                 "reference": "174f009ed36379a801109955fc5a71a49fe62dd4",
                 "shasum": "d1d8e6fe12fd6cf464efed2e41aa576a0563707f"
             },
