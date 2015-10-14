@@ -143,6 +143,10 @@ class Context implements ContextInterface
      */
     public function getPlugin($name)
     {
+        if (!$this->plugins->containsKey($name)) {
+            throw new \InvalidArgumentException('Plugin "' . $name . '" not found');
+        }
+
         return $this->plugins->get($name);
     }
 

@@ -14,12 +14,14 @@
         "doctrine/collections": "^1.3",
         "react/stream": "^0.4.3",
         "illuminate/container": "~5.1",
-        "psr/log": "~1.0"
+        "psr/log": "~1.0",
+        "symfony/process": "^2.6"
     },
     "autoload": {
         "psr-4": {
             "Task\\": "src/Core/",
-            "Task\\Cli\\": "src/Cli/"
+            "Task\\Cli\\": "src/Cli/",
+            "Task\\Plugin\\": "src/Plugin/"
         }
     },
     "require-dev": {

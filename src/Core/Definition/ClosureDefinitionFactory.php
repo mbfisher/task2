@@ -3,6 +3,7 @@
 namespace Task\Definition;
 
 use Task\ClosureTask;
+use Task\CompositeTask;
 use Task\TaskInterface;
 
 class ClosureDefinitionFactory
@@ -24,10 +25,6 @@ class ClosureDefinitionFactory
         # Work is the last arg
         $work = array_pop($arguments);
 
-        if (!($work instanceof \Closure)) {
-            throw new \InvalidArgumentException('Work must be callable');
-        }
-
         # Name is the first arg
         $name = array_shift($arguments);
         $description = null;
@@ -48,7 +45,16 @@ class ClosureDefinitionFactory
             throw new \InvalidArgumentException('Dependencies must be an array');
         }
 
-        $task = new ClosureTask($name, $description, $work);
+        if (is_array($work)) {
+            $task = new CompositeTask($name, $description, $work);
+        } else {
+            if (!($work instanceof \Closure)) {
+                throw new \InvalidArgumentException('Work must be callable');
+            }
+
+            $task = new ClosureTask($name, $description, $work);
+        }
+
         return new Definition($task, $dependencies);
     }
 }

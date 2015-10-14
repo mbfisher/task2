@@ -123,6 +123,10 @@ class Project implements ProjectInterface
 
     public function getTaskDefinition($name)
     {
+        if (!$this->tasks->containsKey($name)) {
+            throw new \InvalidArgumentException('Task "' . $name .'" not found');
+        }
+
         return $this->tasks->get($name);
     }
 
