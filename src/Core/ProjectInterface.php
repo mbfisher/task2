@@ -4,6 +4,7 @@ namespace Task;
 
 use Doctrine\Common\Collections\Collection;
 use Task\Context\ContextInterface;
+use Task\Definition\DefinitionInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
 
@@ -14,6 +15,12 @@ interface ProjectInterface
      * @return TaskInterface
      */
     public function getTask($name);
+
+    /**
+     * @param $name
+     * @return DefinitionInterface
+     */
+    public function getTaskDefinition($name);
 
     /**
      * @param $name

@@ -4,6 +4,9 @@ namespace Task\Context;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Task\Definition\DefinitionInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
 use Task\ProjectInterface;
@@ -31,39 +34,66 @@ class Context implements ContextInterface
      */
     private $parameters;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(ContextBuilder $builder)
     {
         $this->project = $builder->getProject();
         $this->output = $builder->getOutput();
         $this->parameters = $builder->getParameters() ?: new ArrayCollection();
+
         $this->plugins = $builder->getPlugins() ?: new ArrayCollection();
 
         foreach ($this->plugins as $plugin) {
             $plugin->setContext($this);
         }
+
+        $this->logger = $builder->getLogger() ?: new NullLogger();
     }
 
     public function run($name)
     {
-        $task = $this->getProject()->getTask($name);
-        $dependencies = $this->resolveDependencies($name);
+        $definition = $this->getProject()->getTaskDefinition($name);
+
+        $dependencies = $this->resolveDependencies($definition);
 
         foreach ($dependencies as $dependency) {
-            $this->getOutput()->write(sprintf('> Running %s as dependency of %s', $dependency->getName(), $name));
+            $this->getOutput()->write('> Running dependency ' . $dependency->getName());
             $dependency->run($this);
         }
 
-        $this->getOutput()->write("> Running $name");
+        $task = $definition->getTask();
+        $this->getOutput()->write('> Running task ' . $task->getName());
         $task->run($this);
     }
 
     /**
-     * @param $name
+     * @param DefinitionInterface $definition
      * @return TaskInterface[]
      */
-    public function resolveDependencies($name)
+    public function resolveDependencies(DefinitionInterface $definition, $recursive = false)
     {
-        return array_map([$this->getProject(), 'getTask'], $this->getProject()->getTaskDependencies($name));
+        $logger = $this->getLogger();
+
+        $logger->debug('Resolving dependencies for "' . $definition->getTask()->getName() . '"', ['dependencies' => $definition->getDependencies()]);
+
+        $result = [];
+        foreach (array_reverse($definition->getDependencies()) as $dependency) {
+            $dependencyDefinition = $this->getProject()->getTaskDefinition($dependency);
+            $result = array_merge($result, [$dependency], $this->resolveDependencies($dependencyDefinition, true));
+        }
+
+        $logger->debug('Dependency resolution pass', ['dependencies' => $result]);
+
+        if ($recursive) {
+            return $result;
+        } else {
+            $result = array_unique(array_reverse($result));
+            return array_values(array_map([$this->getProject(), 'getTask'], $result));
+        }
     }
 
     /**
@@ -114,5 +144,13 @@ class Context implements ContextInterface
     public function getPlugin($name)
     {
         return $this->plugins->get($name);
+    }
+
+    /**
+     * @return LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 }

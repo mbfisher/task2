@@ -1,8 +1,10 @@
 <?php
 
-namespace Task;
+namespace Task\Definition;
 
-class Definition
+use Task\TaskInterface;
+
+class Definition implements DefinitionInterface
 {
     /**
      * @var TaskInterface

@@ -6,12 +6,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Task\Context\Context;
 use Task\Context\ContextBuilder;
+use Task\Definition\Definition;
+use Task\Definition\ClosureDefinitionFactory;
+use Task\Definition\DefinitionFactoryInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
 
 class Project implements ProjectInterface
 {
+    /**
+     * @var string
+     */
     private $name;
+
+    /**
+     * @var DefinitionFactoryInterface
+     */
+    private $definitionFactory;
 
     /**
      * @var Collection
@@ -31,9 +42,10 @@ class Project implements ProjectInterface
     /**
      * @param $name
      */
-    public function __construct($name)
+    public function __construct($name, DefinitionFactoryInterface $definitionFactory = null)
     {
         $this->name = $name;
+        $this->definitionFactory = $definitionFactory ?: new ClosureDefinitionFactory();
 
         $this->tasks = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
@@ -42,7 +54,14 @@ class Project implements ProjectInterface
 
     public function addTask()
     {
-        $definition = DefinitionFactory::create(func_get_args());
+        $arguments = func_get_args();
+
+        if ($arguments[0] instanceof TaskInterface) {
+            $definition = new Definition($arguments[0], count($arguments) > 1 ? $arguments[1] : []);
+        } else {
+            $definition = $this->getDefinitionFactory()->create($arguments);
+        }
+
         $this->tasks->set($definition->getTask()->getName(), $definition);
     }
 
@@ -77,6 +96,14 @@ class Project implements ProjectInterface
     }
 
     /**
+     * @return DefinitionFactoryInterface
+     */
+    public function getDefinitionFactory()
+    {
+        return $this->definitionFactory;
+    }
+
+    /**
      * @return Collection
      */
     public function getTasks()
@@ -90,12 +117,17 @@ class Project implements ProjectInterface
      */
     public function getTask($name)
     {
-        return $this->tasks->get($name);
+        return $this->hasTask($name) ? $this->tasks->get($name)->getTask() : null;
     }
 
     public function hasTask($name)
     {
         return $this->tasks->containsKey($name);
+    }
+
+    public function getTaskDefinition($name)
+    {
+        return $this->tasks->get($name);
     }
 
     /**
