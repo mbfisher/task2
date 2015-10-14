@@ -32,15 +32,11 @@ class Project implements ProjectInterface
     /**
      * @var Collection
      */
-    private $dependencies;
-
-    /**
-     * @var Collection
-     */
     private $contextPlugins;
 
     /**
      * @param $name
+     * @param DefinitionFactoryInterface|null $definitionFactory
      */
     public function __construct($name, DefinitionFactoryInterface $definitionFactory = null)
     {
@@ -128,23 +124,6 @@ class Project implements ProjectInterface
     public function getTaskDefinition($name)
     {
         return $this->tasks->get($name);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDependencies()
-    {
-        return $this->dependencies;
-    }
-
-    /**
-     * @param $name
-     * @return array
-     */
-    public function getTaskDependencies($name)
-    {
-        return $this->dependencies->get($name) ?: [];
     }
 
     /**

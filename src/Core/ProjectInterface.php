@@ -18,21 +18,15 @@ interface ProjectInterface
 
     /**
      * @param $name
-     * @return DefinitionInterface
-     */
-    public function getTaskDefinition($name);
-
-    /**
-     * @param $name
      * @return bool
      */
     public function hasTask($name);
 
     /**
      * @param $name
-     * @return TaskInterface[]
+     * @return DefinitionInterface
      */
-    public function getTaskDependencies($name);
+    public function getTaskDefinition($name);
 
     /**
      * @param PluginInterface $plugin
