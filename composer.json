@@ -25,5 +25,10 @@
     "require-dev": {
         "phpunit/phpunit": "^5.0",
         "monolog/monolog": "~1.17"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
     }
 }
