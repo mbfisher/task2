@@ -15,7 +15,8 @@
         "react/stream": "^0.4.3",
         "illuminate/container": "~5.1",
         "psr/log": "~1.0",
-        "symfony/process": "^2.6"
+        "react/promise": "~2.2",
+        "react/child-process": "0.4.*"
     },
     "autoload": {
         "psr-4": {

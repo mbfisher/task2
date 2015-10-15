@@ -4,8 +4,6 @@ require 'vendor/autoload.php';
 
 $project = new Task\Project('test');
 
-$project->plugContext();
-
 $project->addTask('hello', function () {
     $this->getOutput()->write('hello!');
 });

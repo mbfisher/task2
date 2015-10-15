@@ -2,10 +2,9 @@
 
 namespace Task\Plugin;
 
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessBuilder;
-use Task\Output\OutputInterface;
-use Task\Plugin\Process\RuntimeException;
+use React\ChildProcess\Process;
+use React\EventLoop\Timer\Timer;
+use React\Promise\Deferred;
 
 class ProcessPlugin extends AbstractPlugin
 {
@@ -14,38 +13,20 @@ class ProcessPlugin extends AbstractPlugin
         return ['process', 'ps'];
     }
 
-    public function createProcess()
+    public function run(Process $process)
     {
-        return new ProcessBuilder();
-    }
+        $deferred = new Deferred();
 
-    /**
-     * @param string|Process|ProcessBuilder $process
-     * @param OutputInterface|null $output
-     * @return string
-     */
-    public function run($process, OutputInterface $output = null)
-    {
-        if (is_string($process)) {
-            $process = new Process($process);
-        } elseif ($process instanceof ProcessBuilder) {
-            $process = $process->getProcess();
-        } elseif (!($process instanceof Process)) {
-            throw new \InvalidArgumentException('You must pass a string, Process or ProcessBuilder to ProcessPlugin#run');
-        }
-
-        if ($output) {
-            $process->run(function ($type, $data) use ($output) {
-                $output->write($data);
+        $this->getContext()->getLoop()->addTimer(0.001, function (Timer $timer) use ($process, $deferred) {
+            $process->on('exit', function ($exitCode, $termSignal) use ($deferred) {
+                $deferred->resolve($exitCode);
             });
-        } else {
-            $process->run();
-        }
 
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException($process);
-        }
+            $process->start($timer->getLoop());
 
-        return $process->getOutput();
+            $process->stdout->on('data', function ($output) {
+                echo 'data', $output;
+            });
+        });
     }
 }

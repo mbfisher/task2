@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use React\EventLoop\LoopInterface;
 use Task\Definition\DefinitionInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
@@ -18,6 +19,11 @@ class Context implements ContextInterface
      * @var ProjectInterface
      */
     private $project;
+
+    /**
+     * @var LoopInterface
+     */
+    private $loop;
 
     /**
      * @var OutputInterface
@@ -42,6 +48,7 @@ class Context implements ContextInterface
     public function __construct(ContextBuilder $builder)
     {
         $this->project = $builder->getProject();
+        $this->loop = $builder->getLoop();
         $this->output = $builder->getOutput();
         $this->parameters = $builder->getParameters() ?: new ArrayCollection();
 
@@ -67,7 +74,10 @@ class Context implements ContextInterface
 
         $task = $definition->getTask();
         $this->getOutput()->write('> Running task ' . $task->getName());
-        $task->run($this);
+
+        $task->run($this)->then(function () use ($task) {
+            $this->getOutput()->write('> Finished ' . $task->getName());
+        });
     }
 
     /**
@@ -102,6 +112,14 @@ class Context implements ContextInterface
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @return LoopInterface
+     */
+    public function getLoop()
+    {
+        return $this->loop;
     }
 
     /**

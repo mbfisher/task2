@@ -2,7 +2,9 @@
 
 namespace Task;
 
+use React\Promise\PromiseInterface;
 use Task\Context\ContextInterface;
+use React\Promise\Deferred;
 
 class ClosureTask implements TaskInterface
 {
@@ -51,7 +53,22 @@ class ClosureTask implements TaskInterface
 
     public function run(ContextInterface $context)
     {
+        $deferred = new Deferred();
+
         $closure = \Closure::bind($this->getWork(), $context);
-        call_user_func($closure);
+
+        try {
+            $result = call_user_func($closure);
+
+            if ($result instanceof PromiseInterface) {
+                return $result;
+            } else {
+                $deferred->resolve($result);
+                return $deferred->promise();
+            }
+        } catch (\Exception $ex) {
+            $deferred->reject($ex);
+            return $deferred->promise();
+        }
     }
 }

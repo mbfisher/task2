@@ -78,9 +78,17 @@ class Project implements ProjectInterface
         return $builder->getResult();
     }
 
+    /**
+     * @param PluginInterface $plugin
+     * @param null $name
+     */
     public function plugContext(PluginInterface $plugin, $name = null)
     {
-        $this->contextPlugins->set($name ?: $plugin->getName(), $plugin);
+        $names = $name ? (array) $name : (array) $plugin->getName();
+
+        foreach ($names as $name) {
+            $this->contextPlugins->set($name, $plugin);
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Task\Context;
 
 use Doctrine\Common\Collections\Collection;
+use React\EventLoop\LoopInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
 use Task\ProjectInterface;
@@ -14,6 +15,10 @@ class ContextBuilder
      * @var ProjectInterface
      */
     private $project;
+    /**
+     * @var LoopInterface
+     */
+    private $loop;
     /**
      * @var OutputInterface
      */
@@ -54,6 +59,22 @@ class ContextBuilder
         $this->project = $project;
 
         return $this;
+    }
+
+    /**
+     * @return LoopInterface
+     */
+    public function getLoop()
+    {
+        return $this->loop;
+    }
+
+    /**
+     * @param LoopInterface $loop
+     */
+    public function setLoop($loop)
+    {
+        $this->loop = $loop;
     }
 
     /**
