@@ -38,7 +38,10 @@ class RunCommand extends Command
 
         $context = $project->createContext($output, $parameters);
 
-        $context->run($name);
+        $context->run($name)->then(null, function (\Exception $ex) {
+            echo 'error3', $ex->getMessage();
+            throw $ex;
+        });
     }
 
     /**

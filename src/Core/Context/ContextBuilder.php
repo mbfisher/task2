@@ -4,6 +4,7 @@ namespace Task\Context;
 
 use Doctrine\Common\Collections\Collection;
 use React\EventLoop\LoopInterface;
+use React\Stream\WritableStreamInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
 use Task\ProjectInterface;
@@ -20,7 +21,7 @@ class ContextBuilder
      */
     private $loop;
     /**
-     * @var OutputInterface
+     * @var WritableStreamInterface
      */
     private $output;
     /**
@@ -28,7 +29,7 @@ class ContextBuilder
      */
     private $parameters;
     /**
-     * @var Collection
+     * @var array
      */
     private $plugins;
 
@@ -72,13 +73,13 @@ class ContextBuilder
     /**
      * @param LoopInterface $loop
      */
-    public function setLoop($loop)
+    public function setLoop(LoopInterface $loop)
     {
         $this->loop = $loop;
     }
 
     /**
-     * @return OutputInterface
+     * @return WritableStreamInterface
      */
     public function getOutput()
     {
@@ -86,10 +87,10 @@ class ContextBuilder
     }
 
     /**
-     * @param OutputInterface $output
+     * @param WritableStreamInterface $output
      * @return ContextBuilder
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput(WritableStreamInterface $output)
     {
         $this->output = $output;
 
@@ -128,7 +129,7 @@ class ContextBuilder
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getPlugins()
     {
@@ -136,24 +137,12 @@ class ContextBuilder
     }
 
     /**
-     * @param Collection $plugins
+     * @param array $plugins
      * @return ContextBuilder
      */
-    public function setPlugins(Collection $plugins)
+    public function setPlugins(array $plugins)
     {
         $this->plugins = $plugins;
-
-        return $this;
-    }
-
-    /**
-     * @param PluginInterface $plugin
-     * @param null $name
-     * @return ContextBuilder
-     */
-    public function addPlugin(PluginInterface $plugin, $name = null)
-    {
-        $this->plugins->set($name ?: $plugin->getName(), $plugin);
 
         return $this;
     }

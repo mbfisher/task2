@@ -13,4 +13,6 @@ foreach ([
 }
 
 $application = new Task\Cli\Application();
-$application->run();
+$exitCode = $application->run()->then(function ($exitCode) {
+    exit($exitCode);
+});

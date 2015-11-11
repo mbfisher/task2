@@ -16,7 +16,8 @@
         "illuminate/container": "~5.1",
         "psr/log": "~1.0",
         "react/promise": "~2.2",
-        "react/child-process": "0.4.*"
+        "react/child-process": "0.4.*",
+        "league/climate": "~3.2"
     },
     "autoload": {
         "psr-4": {

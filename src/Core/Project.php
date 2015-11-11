@@ -4,6 +4,9 @@ namespace Task;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
+use React\Stream\WritableStreamInterface;
 use Task\Context\Context;
 use Task\Context\ContextBuilder;
 use Task\Definition\Definition;
@@ -11,6 +14,7 @@ use Task\Definition\ClosureDefinitionFactory;
 use Task\Definition\DefinitionFactoryInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
+use Task\Plugin\PluginReference;
 
 class Project implements ProjectInterface
 {
@@ -30,7 +34,7 @@ class Project implements ProjectInterface
     private $tasks;
 
     /**
-     * @var Collection
+     * @var array
      */
     private $contextPlugins;
 
@@ -45,7 +49,7 @@ class Project implements ProjectInterface
 
         $this->tasks = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
-        $this->contextPlugins = new ArrayCollection();
+        $this->contextPlugins = [];
     }
 
     public function addTask()
@@ -62,15 +66,17 @@ class Project implements ProjectInterface
     }
 
     /**
-     * @param OutputInterface $output
+     * @param WritableStreamInterface $output
      * @param Collection|null $parameters
+     * @param LoopInterface|null $loop
      * @return Context
      */
-    public function createContext(OutputInterface $output, Collection $parameters = null)
+    public function createContext(LoopInterface $loop, WritableStreamInterface $output, Collection $parameters = null)
     {
         $builder = new ContextBuilder();
 
         $builder->setProject($this);
+        $builder->setLoop($loop);
         $builder->setOutput($output);
         $builder->setParameters($parameters ?: new ArrayCollection());
         $builder->setPlugins($this->getContextPlugins());
@@ -78,17 +84,9 @@ class Project implements ProjectInterface
         return $builder->getResult();
     }
 
-    /**
-     * @param PluginInterface $plugin
-     * @param null $name
-     */
-    public function plugContext(PluginInterface $plugin, $name = null)
+    public function plugContext($plugin, $name = null)
     {
-        $names = $name ? (array) $name : (array) $plugin->getName();
-
-        foreach ($names as $name) {
-            $this->contextPlugins->set($name, $plugin);
-        }
+        $this->contextPlugins[] = new PluginReference($plugin, $name);
     }
 
     /**
@@ -139,7 +137,7 @@ class Project implements ProjectInterface
     }
 
     /**
-     * @return Collection
+     * @return array
      */
     public function getContextPlugins()
     {

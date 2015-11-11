@@ -3,6 +3,7 @@
 namespace Task\Context;
 
 use React\EventLoop\LoopInterface;
+use React\Promise\PromiseInterface;
 use Task\Output\OutputInterface;
 
 interface ContextInterface
@@ -19,5 +20,9 @@ interface ContextInterface
      */
     public function getOutput();
 
+    /**
+     * @param $name
+     * @return PromiseInterface
+     */
     public function run($name);
 }

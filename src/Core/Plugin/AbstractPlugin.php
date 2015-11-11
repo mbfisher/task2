@@ -12,15 +12,19 @@ abstract class AbstractPlugin implements PluginInterface
     private $context;
 
     /**
+     * AbstractPlugin constructor.
      * @param ContextInterface $context
      */
-    public function setContext(ContextInterface $context)
+    public function __construct(ContextInterface $context)
     {
-        if ($this->context) {
-            throw new \RuntimeException(sprintf('Plugin "%s" already has a context', $this->getName()));
-        }
-
         $this->context = $context;
+    }
+
+    public static function factory()
+    {
+        return function (ContextInterface $context) {
+            return new static($context);
+        };
     }
 
     /**
@@ -28,10 +32,6 @@ abstract class AbstractPlugin implements PluginInterface
      */
     public function getContext()
     {
-        if (!$this->context) {
-            throw new \RuntimeException('Context has not been provided to "%s" plugin yet');
-        }
-
         return $this->context;
     }
 }

@@ -3,6 +3,9 @@
 namespace Task;
 
 use Doctrine\Common\Collections\Collection;
+use React\EventLoop\LoopInterface;
+use React\Stream\WritableStreamInterface;
+use React\Tests\Stream\WritableStreamTest;
 use Task\Context\ContextInterface;
 use Task\Definition\DefinitionInterface;
 use Task\Output\OutputInterface;
@@ -29,16 +32,17 @@ interface ProjectInterface
     public function getTaskDefinition($name);
 
     /**
-     * @param PluginInterface $plugin
+     * @param PluginInterface|callable $plugin
      * @param null $name
      * @void
      */
-    public function plugContext(PluginInterface $plugin, $name = null);
+    public function plugContext($plugin, $name = null);
 
     /**
-     * @param OutputInterface $output
+     * @param LoopInterface $loop
+     * @param WritableStreamInterface $output
      * @param Collection|null $parameters
      * @return ContextInterface
      */
-    public function createContext(OutputInterface $output, Collection $parameters = null);
+    public function createContext(LoopInterface $loop, WritableStreamInterface $output, Collection $parameters = null);
 }

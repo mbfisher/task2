@@ -6,10 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Task\Definition\DefinitionInterface;
 use Task\Output\OutputInterface;
 use Task\Plugin\PluginInterface;
+use Task\Plugin\PluginReference;
 use Task\ProjectInterface;
 use Task\TaskInterface;
 
@@ -52,13 +54,25 @@ class Context implements ContextInterface
         $this->output = $builder->getOutput();
         $this->parameters = $builder->getParameters() ?: new ArrayCollection();
 
-        $this->plugins = $builder->getPlugins() ?: new ArrayCollection();
-
-        foreach ($this->plugins as $plugin) {
-            $plugin->setContext($this);
-        }
+        $this->plugins = $this->createPlugins($builder->getPlugins());
 
         $this->logger = $builder->getLogger() ?: new NullLogger();
+    }
+
+    /**
+     * @param PluginReference[] $references
+     * @return Collection
+     */
+    private function createPlugins(array $references)
+    {
+        $plugins = new ArrayCollection();
+
+        foreach ($references as $reference) {
+            $plugin = $reference->createPlugin($this);
+            $plugins->set($reference->getName() ?: $plugin->getName(), $plugin);
+        }
+
+        return $plugins;
     }
 
     public function run($name)
@@ -75,9 +89,17 @@ class Context implements ContextInterface
         $task = $definition->getTask();
         $this->getOutput()->write('> Running task ' . $task->getName());
 
-        $task->run($this)->then(function () use ($task) {
+        $promise = $task->run($this);
+        $result = $promise->then(function () use ($task) {
             $this->getOutput()->write('> Finished ' . $task->getName());
+        }, function (\Exception $ex) {
+            $this->getLoop()->stop();
+            throw $ex;
         });
+
+        $this->getLoop()->run();
+
+        return $result;
     }
 
     /**

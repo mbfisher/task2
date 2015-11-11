@@ -59,15 +59,15 @@ class ClosureTask implements TaskInterface
 
         try {
             $result = call_user_func($closure);
-
-            if ($result instanceof PromiseInterface) {
-                return $result;
-            } else {
-                $deferred->resolve($result);
-                return $deferred->promise();
-            }
         } catch (\Exception $ex) {
             $deferred->reject($ex);
+            return $deferred->promise();
+        }
+
+        if ($result instanceof PromiseInterface) {
+            return $result;
+        } else {
+            $deferred->resolve($result);
             return $deferred->promise();
         }
     }

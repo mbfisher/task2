@@ -14,15 +14,6 @@ class ConsoleOutput extends EventEmitter implements OutputInterface
     private $output;
 
     /**
-     * ConsoleOutput constructor.
-     * @param ConsoleOutputInterface $output
-     */
-    public function __construct(ConsoleOutputInterface $output)
-    {
-        $this->output = $output;
-    }
-
-    /**
      * @return ConsoleOutputInterface
      */
     public function getOutput()
@@ -37,7 +28,7 @@ class ConsoleOutput extends EventEmitter implements OutputInterface
 
     public function write($data)
     {
-        $this->getOutput()->write($data, true);
+        echo $data, "\n";
     }
 
     public function end($data = null)
